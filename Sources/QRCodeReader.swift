@@ -238,19 +238,17 @@ public final class QRCodeReader: NSObject, AVCaptureMetadataOutputObjectsDelegat
   public class func videoOrientation(deviceOrientation orientation: UIDeviceOrientation, withSupportedOrientations supportedOrientations: UIInterfaceOrientationMask, fallbackOrientation: AVCaptureVideoOrientation? = nil) -> AVCaptureVideoOrientation {
     let result: AVCaptureVideoOrientation
 
-    switch (orientation, fallbackOrientation) {
-    case (.landscapeLeft, _):
-      result = .landscapeRight
-    case (.landscapeRight, _):
-      result = .landscapeLeft
-    case (.portrait, _):
-      result = .portrait
-    case (.portraitUpsideDown, _):
-      result = .portraitUpsideDown
-    case (_, .some(let orientation)):
-      result = orientation
-    default:
-      result = .portrait
+    switch UIApplication.shared.statusBarOrientation {
+    case .landscapeLeft:
+        result = .landscapeLeft
+    case .landscapeRight:
+        result = .landscapeRight
+    case .portrait:
+        result = .portrait
+    case .portraitUpsideDown:
+        result = .portraitUpsideDown
+    case .unknown:
+        result = .portrait
     }
 
     if supportedOrientations.contains(orientationMask(videoOrientation: result)) {
